@@ -7,13 +7,14 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WindowsFormsApp2
 {
     public partial class Form1 : Form
     {
         // Say Hello To Decompilers
-        private static readonly string HelloThere = "Hello There Fellow Decompiler, This Program Was Made By D.RUSS#2430 (xXCrypticNightXx).";
+        private static readonly string HelloThere = "Hello There Fellow Decompiler, updated by jacz24. This program was originally made by D.RUSS#2430 (xXCrypticNightXx).";
 
         private string VersionNumber = "2.40";
 
@@ -1133,68 +1134,102 @@ namespace WindowsFormsApp2
             }
 
         }
-
+        
+        private CancellationTokenSource _startupCancellationTokenSource;
         //  Start Bot
-        private void Button5_Click(object sender, EventArgs e)
+        private async void Button5_Click(object sender, EventArgs e)
         {
-
             if (checkBox8.Checked)
             {
-
-                // Start Bot
-
-                //  
-                Button5.Text = "Starting Bot...";
-                GroupBox1.Enabled = false;
-                GroupBox2.Enabled = false;
-                GroupBox3.Enabled = false;
-                GroupBox4.Enabled = false;
-                GroupBox5.Enabled = false;
-                Button4.Enabled = true;
-                Button4.Visible = true;
-                Button5.Visible = false;
-                RodHealth = 1;
-                ScrollReject = 0;
-                TotalLines = 0;
-                Label6.Text = "0";
-                int Num2 = Convert.ToInt32(NumericUpDown2.Value);
-                System.Threading.Thread.Sleep(Num2);
-                //  Wait Start-Delay Seconds
-                //  Throw Line
-                System.Threading.Thread.Sleep(100);
-                mouse_event(8, 0, 0, 0, 1);
-                //  RIGHTDOWN
-                System.Threading.Thread.Sleep(100);
-                mouse_event(16, 0, 0, 0, 1);
-                //  RIGHTUP
-                int Num5 = Convert.ToInt32(NumericUpDown5.Value);
-                System.Threading.Thread.Sleep(Num5);
-                //  Wait Noise Reduction Time
-                //  Start Anti-AFK
-                if (checkBox10.Checked == true)
+                // Cancel any previous startup operation
+                _startupCancellationTokenSource?.Cancel();
+                _startupCancellationTokenSource = new CancellationTokenSource();
+        
+                try
                 {
-                    Timer5.Enabled = true;
-                    Timer5.Start();
+                    await StartBotAsync(_startupCancellationTokenSource.Token);
                 }
-
-                //  Start Time-Out
-                Timer7.Enabled = true;
-                Timer7.Start();
-                //  Start Bot
-                Timer1.Enabled = true;
-                Timer1.Start();
-
+                catch (OperationCanceledException)
+                {
+                    // Handle cancellation (e.g., user clicked stop during startup)
+                    ResetUIState();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error starting bot: {ex.Message}", 
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ResetUIState();
+                }
             }
             else
             {
-
-                // MC Was Not Started
-                MessageBox.Show("Please Start Minecraft.", "Minecraft Auto-Fishing Bot v" + VersionNumber, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+                MessageBox.Show("Please Start Minecraft.", "Minecraft Auto-Fishing Bot v" + VersionNumber, 
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+        
+        private async Task StartBotAsync(CancellationToken cancellationToken)
+        {
+            // Start Bot
+            Button5.Text = "Starting Bot...";
+            GroupBox1.Enabled = false;
+            GroupBox2.Enabled = false;
+            GroupBox3.Enabled = false;
+            GroupBox4.Enabled = false;
+            GroupBox5.Enabled = false;
+            Button4.Enabled = true;
+            Button4.Visible = true;
+            Button5.Visible = false;
+            RodHealth = 1;
+            ScrollReject = 0;
+            TotalLines = 0;
+            Label6.Text = "0";
+    
+            int startDelayValue = Convert.ToInt32(NumericUpDown2.Value); // In Milliseconds
+    
+            // Non-blocking delay with cancellation support
+            await Task.Delay(startDelayValue, cancellationToken);
+    
+            // Throw Line
+            await Task.Delay(100, cancellationToken);
+            mouse_event(8, 0, 0, 0, 1); // RIGHTDOWN
+    
+            await Task.Delay(100, cancellationToken);
+            mouse_event(16, 0, 0, 0, 1); // RIGHTUP
+    
+            int noiseReductionTimeValue = Convert.ToInt32(NumericUpDown5.Value);
+            await Task.Delay(noiseReductionTimeValue, cancellationToken); // Wait Noise Reduction Time
+   
+            // Start Anti-AFK
+            if (checkBox10.Checked == true)
+            {
+                Timer5.Enabled = true;
+                Timer5.Start();
             }
 
+            // Start Time-Out
+            Timer7.Enabled = true;
+            Timer7.Start();
+    
+            // Start Bot
+            Timer1.Enabled = true;
+            Timer1.Start();
         }
-
+        
+        private void ResetUIState()
+        {
+            // Reset UI to initial state if needed
+            Button5.Text = "Start Bot";
+            GroupBox1.Enabled = true;
+            GroupBox2.Enabled = true;
+            GroupBox3.Enabled = true;
+            GroupBox4.Enabled = true;
+            GroupBox5.Enabled = true;
+            Button4.Enabled = false;
+            Button4.Visible = false;
+            Button5.Visible = true;
+        }
+        
         //  Form Closing
         private void Form1_Closing(object sender, EventArgs e)
         {
@@ -1267,14 +1302,67 @@ namespace WindowsFormsApp2
         }
 
         //  Stop Bot
-        private void Button4_Click(object sender, EventArgs e)
+        private async void Button4_Click(object sender, EventArgs e)
         {
-
-            //  Send Stop State
+            // Send Stop State
             Button4.Enabled = false;
-            checkBox6.Checked = true;
-            Button4.Text = "Stoping Bot...";
+            Button4.Text = "Stopping Bot...";
+    
+            try
+            {
+                // Cancel any ongoing startup operation
+                _startupCancellationTokenSource?.Cancel();
+        
+                // Stop all timers immediately
+                Timer1.Enabled = false;
+                Timer1.Stop();
+                Timer5.Enabled = false;
+                Timer5.Stop();
+                Timer7.Enabled = false;
+                Timer7.Stop();
+        
+                // Set stop flag (if your bot logic checks this)
+                checkBox6.Checked = true;
+        
+                // Optional: Add a small delay to ensure everything stops gracefully
+                await Task.Delay(100);
+        
+                // Reset UI state
+                ResetStopUIState();
+        
+                Button4.Text = "Stop Bot";
+        
+                // Optional: Auto-hide the stop button after a short delay
+                await Task.Delay(1000);
+                Button4.Visible = false;
+                Button5.Visible = true;
+                Button5.Text = "Start Bot";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error stopping bot: {ex.Message}", 
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
+        private void ResetStopUIState()
+        {
+            // Re-enable all UI elements
+            GroupBox1.Enabled = true;
+            GroupBox2.Enabled = true;
+            GroupBox3.Enabled = true;
+            GroupBox4.Enabled = true;
+            GroupBox5.Enabled = true;
+            Button4.Enabled = true;
+    
+            // Reset any other state variables
+            RodHealth = 0;
+            ScrollReject = 0;
+            TotalLines = 0;
+            Label6.Text = "0";
+    
+            // Clear the stop flag
+            checkBox6.Checked = false;
         }
 
         //  Unlimited Throws
@@ -1365,8 +1453,8 @@ namespace WindowsFormsApp2
                     checkBox10.Checked = false;
                     checkBox11.Checked = false;
                     Button4.Visible = false;
-                    Button4.Text = "Press To Stop Bot";
-                    Button5.Text = "Press To Start Bot";
+                    Button4.Text = "Stop Bot";
+                    Button5.Text = "Start Bot";
                     Button5.Visible = true;
                     checkBox1.Checked = false;
                     checkBox2.Checked = false;

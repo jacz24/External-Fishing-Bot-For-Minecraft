@@ -252,7 +252,7 @@
             this.NumericUpDown2.Size = new System.Drawing.Size(219, 20);
             this.NumericUpDown2.TabIndex = 12;
             this.NumericUpDown2.Value = new decimal(new int[] {
-            10000,
+            5000,
             0,
             0,
             0});
@@ -474,7 +474,7 @@
             this.numericUpDown6.Size = new System.Drawing.Size(225, 20);
             this.numericUpDown6.TabIndex = 16;
             this.numericUpDown6.Value = new decimal(new int[] {
-            10,
+            4,
             0,
             0,
             0});

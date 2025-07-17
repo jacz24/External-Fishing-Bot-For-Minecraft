@@ -1,0 +1,10 @@
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\bin\Debug\Minecraft Auto-Fishing Bot v2.40.exe.config
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\bin\Debug\Minecraft Auto-Fishing Bot v2.40.exe
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\bin\Debug\Minecraft Auto-Fishing Bot v2.40.pdb
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\obj\Debug\Minecraft-Fishing-Bot.csproj.AssemblyReference.cache
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.Form1.resources
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\obj\Debug\MinecraftFishingBot.Properties.Resources.resources
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\obj\Debug\Minecraft-Fishing-Bot.csproj.GenerateResource.cache
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\obj\Debug\Minecraft-Fishing-Bot.csproj.CoreCompileInputs.cache
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\obj\Debug\Minecraft Auto-Fishing Bot v2.40.exe
+C:\Users\irwin\OneDrive\Documents\GitHub\External-Fishing-Bot-For-Minecraft\Minecraft-Fishing-Bot v2.40 - Bedrock\WindowsFormsApp2\obj\Debug\Minecraft Auto-Fishing Bot v2.40.pdb
