@@ -959,16 +959,15 @@ namespace WindowsFormsApp2
                 // Move Point
                 Cursor.Position = new Point(OldPosX, OldPosY + (int)numericUpDown7.Value);
 
-                //  Wait Line-In Seconds
+                //  Wait Line-In
                 Thread.Sleep(100);
             }
 
             //  Do Not Do if No Pole In INV
             if (DummyScroll == 0)
             {
-                int Num3 = Convert.ToInt32(NumericUpDown3.Value);
-                Thread.Sleep(Num3);
-                //  Wait Line-In Seconds
+                Task.Delay(_lineInDelayValue).Wait();
+                //  Wait Line-In
                 Thread.Sleep(100);
                 Form1.mouse_event(8, 0, 0, 0, 1);
                 //  RIGHTDOWN
@@ -981,9 +980,8 @@ namespace WindowsFormsApp2
                 //  Reset DummyScroll
                 DummyScroll = 0;
             }
-
-            int Num4 = Convert.ToInt32(NumericUpDown4.Value);
-            Thread.Sleep(Num4);
+            
+            Task.Delay(_lineOutDelayValue).Wait(); // Wait Line-Out
             //  Normalize Swing Offset 
             if (checkBox12.Checked)
             {
@@ -992,19 +990,18 @@ namespace WindowsFormsApp2
                 // Move Point
                 Cursor.Position = new Point(OldPosX, OldPosY - (int)numericUpDown7.Value);
 
-                //  Wait Line-In Seconds
+                //  Wait Line-In
                 Thread.Sleep(100);
             }
-            //  Wait Line-Out Seconds
+            
             Thread.Sleep(100);
             Form1.mouse_event(8, 0, 0, 0, 1);
             //  RIGHTDOWN
             Thread.Sleep(100);
             Form1.mouse_event(16, 0, 0, 0, 1);
             //  RIGHTUP
-            int Num5 = Convert.ToInt32(NumericUpDown5.Value);
-            Thread.Sleep(Num5);
-            //  Wait Kill-Noise Seconds
+            Task.Delay(_noiseDelayValue).Wait();
+            //  Wait Kill-Noise 
             //  Start Time-Out
             Timer7.Enabled = true;
             Timer7.Start();
@@ -1136,9 +1133,25 @@ namespace WindowsFormsApp2
         }
         
         private CancellationTokenSource _startupCancellationTokenSource;
+        
+        private int _startBotDelayValue;
+        private int _lineInDelayValue;
+        private int _lineOutDelayValue;
+        private int _noiseDelayValue;
+
+        private void setup_DelayValues()
+        {
+            _startBotDelayValue = Convert.ToInt32(NumericUpDown2.Value); // Milliseconds
+            _lineInDelayValue = Convert.ToInt32(NumericUpDown3.Value); // Milliseconds
+            _lineOutDelayValue = Convert.ToInt32(NumericUpDown4.Value); // Milliseconds
+            _noiseDelayValue = Convert.ToInt32(NumericUpDown5.Value); // Milliseconds
+        }
+        
         //  Start Bot
         private async void Button5_Click(object sender, EventArgs e)
         {
+            setup_DelayValues(); // Sets up variables of all the delay times to be used around the bot
+            
             if (checkBox8.Checked)
             {
                 // Cancel any previous startup operation
@@ -1168,6 +1181,9 @@ namespace WindowsFormsApp2
             }
         }
         
+        
+        
+        
         private async Task StartBotAsync(CancellationToken cancellationToken)
         {
             // Start Bot
@@ -1185,10 +1201,8 @@ namespace WindowsFormsApp2
             TotalLines = 0;
             Label6.Text = "0";
     
-            int startDelayValue = Convert.ToInt32(NumericUpDown2.Value); // In Milliseconds
-    
             // Non-blocking delay with cancellation support
-            await Task.Delay(startDelayValue, cancellationToken);
+            await Task.Delay(_startBotDelayValue, cancellationToken);
     
             // Throw Line
             await Task.Delay(100, cancellationToken);
@@ -1196,9 +1210,8 @@ namespace WindowsFormsApp2
     
             await Task.Delay(100, cancellationToken);
             mouse_event(16, 0, 0, 0, 1); // RIGHTUP
-    
-            int noiseReductionTimeValue = Convert.ToInt32(NumericUpDown5.Value);
-            await Task.Delay(noiseReductionTimeValue, cancellationToken); // Wait Noise Reduction Time
+            
+            await Task.Delay(_noiseDelayValue, cancellationToken); // Wait Noise Delay Time
    
             // Start Anti-AFK
             if (checkBox10.Checked == true)
@@ -1415,7 +1428,7 @@ namespace WindowsFormsApp2
         private void Timer7_Tick(object sender, EventArgs e)
         {
 
-            //  Disable Timmer
+            //  Disable Timer
             Timer1.Stop();
             Timer1.Enabled = false;
             Timer7.Stop();
@@ -1474,18 +1487,16 @@ namespace WindowsFormsApp2
                     MouseScroll(false, 1);
                     // scrolls Down 10 wheel clicks
                     //  Cast Rod
-                    int Num4 = Convert.ToInt32(NumericUpDown4.Value);
-                    System.Threading.Thread.Sleep(Num4);
-                    //  Wait Line-Out Seconds
+                    Task.Delay(_lineOutDelayValue).Wait();
+                    //  Wait Line-Out 
                     System.Threading.Thread.Sleep(100);
                     mouse_event(8, 0, 0, 0, 1);
                     //  RIGHTDOWN
                     System.Threading.Thread.Sleep(100);
                     mouse_event(16, 0, 0, 0, 1);
                     //  RIGHTUP
-                    int Num5 = Convert.ToInt32(NumericUpDown5.Value);
-                    System.Threading.Thread.Sleep(Num5);
-                    //  Wait Kill-Noise Seconds
+                    Task.Delay(_noiseDelayValue).Wait();
+                    //  Wait Kill-Noise
                     RodHealth = 0;
                     ScrollReject = (ScrollReject + 1);
                     //  Start Time-Out
